@@ -35,6 +35,7 @@
   src: url(./fonts/HelveticaNeue-UltraLight.otf) format('opentype');
   font-weight: 600;
   font-style: 'normal';
+  text-align: center;
 }
 
 .buttons {
