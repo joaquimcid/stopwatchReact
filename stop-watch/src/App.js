@@ -1,7 +1,7 @@
 import React from 'react';
-import Display from './Display';
-import Buttons from './Buttons';
-import Laps from './Laps';
+import Display from './modules/Display';
+import Buttons from './modules/Buttons';
+import Laps from './modules/Laps';
 
 import './App.css';
 
