@@ -1,1 +1,24 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 ~$cumento.rtf
+
+# dependencies
+/stop-watch/node_modules
+/stop-watch/.pnp
+/stop-watch/.pnp.js
+
+# testing
+/stop-watch/coverage
+
+# production
+/stop-watch/build
+
+# misc
+/stop-watch/.DS_Store
+/stop-watch/.env.local
+/stop-watch/.env.development.local
+/stop-watch/.env.test.local
+/stop-watch/.env.production.local
+
+/stop-watch/npm-debug.log*
+/stop-watch/yarn-debug.log*
+/stop-watch/yarn-error.log*
