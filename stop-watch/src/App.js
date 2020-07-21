@@ -1,7 +1,9 @@
 import React from 'react';
-import Display from './modules/Display';
-import Buttons from './modules/Buttons';
-import Laps from './modules/Laps';
+import Display from './components/Display';
+import Buttons from './components/Buttons';
+import Laps from './components/Laps';
+import HookCounter from './components/HookCounter';
+import HookButtons from './components/HookButtons';
 
 import './App.css';
 
@@ -9,8 +11,10 @@ function App() {
   return (
     <div className="app">
       <Display />
-      <Buttons />
+      {/* <Buttons /> */}
+      <HookButtons />
       <Laps />
+      <HookCounter />
     </div>
   );
 }
