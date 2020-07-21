@@ -62,19 +62,29 @@
   color: #72c250;
   float: right;
 }
+/* 
+INITIAL
+STARTED
+PAUSED */
 
-.buttonStop {
+.buttonStartWhenINITIAL, .buttonStartWhenPAUSED {
+  background-color: #27380e;
+  color: #72c250;
+  float: right;
+}
+
+.buttonStartWhenSTARTED {
   background-color: #4f140c;
   color: #e93c20;
   float: right;
 }
 
-.buttonLapWhenIsInitial {
+.buttonLapWhenINITIAL {
   background-color: #1d1d1d;
   color: #a6a6a6;
 }
 
-.buttonLapWhenIsRunning {
+.buttonLapWhenSTARTED, .buttonLapWhenPAUSED {
   background-color: #646464;
   color: #ffffff;
 }

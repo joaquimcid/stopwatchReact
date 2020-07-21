@@ -1,38 +1,58 @@
 import React, {useState} from 'react';
+
+// export const Status = '';
 /*
 INITIAL
 STARTED
 PAUSED
 */
+
 function Buttons() {
 
-  const[stopWatchStatus, setStopWatchStatus] = useState('INITIAL');
+  const[Status, setStatus] = useState('INITIAL');
 
-  const setStopWatchStatus = (buttonClicked) => {
+  const newLapOrResetClicked = () => {
 
-    if (buttonClicked === 'lapResetBtn' && stopWatchStatus === 'PAUSED') {
-        stopWatchStatus = 'INITIAL';
+    if (Status === 'PAUSED') {
+      setStatus('INITIAL');
     }
-    
-    if(buttonClicked === 'startStopBtn' && (stopWatchStatus === 'INITIAL' || stopWatchStatus === 'PAUSED'))
+
+  };
+
+  const startOrPauseClicked = () => {
+   
+    if(Status === 'INITIAL' || Status === 'PAUSED')
     {
-      stopWatchStatus = 'STARTED';
+      setStatus('STARTED');
     }
 
-    if(buttonClicked === 'startStopBtn' && stopWatchStatus === 'STARTED')
+    if(Status === 'STARTED')
     {
-      stopWatchStatus = 'PAUSED';
+      setStatus('PAUSED');
     }
 
-  }
+  };
 
   return (
     <div id="buttons" className ="buttons">
-      <button id="lapResetBtn" onClick = {setStopWatchStatus('lapResetBtn')} className="button buttonLapWhenIsInitial" >Lap</button>
-      <button id="startStopBtn" onClick = {setStopWatchStatus('startStopBtn')} className="button buttonStart">Start</button>
-      <button>{stopWatchStatus}</button>
+      <button id="lapResetBtn" 
+              onClick = {() => newLapOrResetClicked()} 
+              className={`button buttonLapWhen${Status}`}> 
+              { Status === "PAUSED" ? "Reset" : "Lap"}
+              </button>
+      <button id="startStopBtn" 
+              onClick = {() => startOrPauseClicked()} 
+              className={`button buttonStartWhen${Status}`}>
+                { Status === "STARTED" ? "Stop" : "Start" }
+                </button>
+      <button>{Status}</button>
   </div>
   );
 }
 
 export default Buttons;
+
+
+// export function Status() {
+//   return status;
+// }
