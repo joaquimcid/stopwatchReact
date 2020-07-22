@@ -1,20 +1,20 @@
-import React, {useState} from 'react';
+import React from 'react';
 
-//const status = '';
-/*
-INITIAL
-STARTED
-PAUSED
-*/
+export default function Buttons({status, onStatusChange, onNewLap}) {
+  /* status => INITIAL, STARTED, PAUSED */
 
-
-function Buttons({newStatus}) {
-  const[status, setStatus] = useState('INITIAL');
+  const updateStatus = (newStatus) => {
+    //setStatus(newStatus);
+    onStatusChange(newStatus);
+  };
 
   const newLapOrResetClicked = () => {
-
     if (status === 'PAUSED') {
-      setStatus('INITIAL');
+      updateStatus('INITIAL');
+    }
+
+    if(status === 'STARTED') {
+      onNewLap();
     }
   };
 
@@ -22,12 +22,12 @@ function Buttons({newStatus}) {
    
     if(status === 'INITIAL' || status === 'PAUSED')
     {
-      setStatus('STARTED');
+      updateStatus('STARTED');
     }
 
     if(status === 'STARTED')
     {
-      setStatus('PAUSED');
+      updateStatus('PAUSED');
     }
 
   };
@@ -48,5 +48,3 @@ function Buttons({newStatus}) {
   </div>
   );
 }
-
-export default Buttons;
