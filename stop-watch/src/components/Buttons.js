@@ -1,35 +1,34 @@
 import React from 'react';
 
-export default function Buttons({status, onStatusChange, onNewLap}) {
+export default function Buttons({status, onButtonClick}) {
   /* status => INITIAL, STARTED, PAUSED */
-
-  const updateStatus = (newStatus) => {
-    //setStatus(newStatus);
-    onStatusChange(newStatus);
-  };
 
   const newLapOrResetClicked = () => {
     if (status === 'PAUSED') {
-      updateStatus('INITIAL');
+      return onButtonClick('RESET');
     }
 
     if(status === 'STARTED') {
-      onNewLap();
+      return onButtonClick('NEWLAP');
     }
   };
 
   const startOrPauseClicked = () => {
    
-    if(status === 'INITIAL' || status === 'PAUSED')
+    if(status === 'INITIAL')
     {
-      updateStatus('STARTED');
+      return onButtonClick('START');
+    }
+
+    if (status === 'PAUSED')
+    {
+      return onButtonClick('CONTINUE');
     }
 
     if(status === 'STARTED')
     {
-      updateStatus('PAUSED');
+      return onButtonClick('PAUSE');
     }
-
   };
 
   return (
