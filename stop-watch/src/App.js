@@ -9,38 +9,44 @@ export default function App() {
   /* status => INITIAL, STARTED, PAUSED */
   const [status, setStatus] = useState('INITIAL');
   const [laps, setLaps] = useState([]);
-  
-  function Command(action) {
-    if (action === 'START' || action === 'CONTINUE') setStatus('STARTED'); 
+  const [startedTime, setStartedTime] = useState(null);
 
+  /* Actions => RESET, NEWLAP, START, PAUSE, CONTINUE */
+  function Command(action) {
+    // console.log(action);
+    
+    if (action === 'START' || action === 'CONTINUE') {
+      setStatus('STARTED');
+
+      if (action === 'START') setStartedTime(Date.now);
+    }
     if (action === 'PAUSE') setStatus('PAUSED');
     
     if (action === 'RESET') {
-        setLaps([]);
-        setStatus('INITIAL');
+      setLaps([]);
+
+      setStatus('INITIAL');
+      setStartedTime(Date.now)
     }
     
     if (action === 'NEWLAP') {
-        laps.push(laps.length+1); 
-        setLaps(laps);
+        const newLap = Date.now() - startedTime;
+        setLaps([newLap].concat(laps));
     } 
       
-    console.log(action);
     console.log(laps);
-    console.log(laps.length);
+    // console.log(laps.length);
   }
 
   return (
     <div className="app">
-      <Display />
-{
- /* RESET, NEWLAP
-    START, PAUSE, CONTINUE */
-}
+      <Display timeToShow={!startedTime || startedTime === null ? null : (Date.now() - startedTime)} />
       <Buttons status = {status} onButtonClick = {(a) =>  Command(a)}/>
-      <Laps laps = {laps}/>
-      {status} 
+      <Laps lapRecords= {laps}/>
+      {/* {status} - {startedTime} - {Date.now() - startedTime} */}
     </div>
   );
 }
+
+
 
