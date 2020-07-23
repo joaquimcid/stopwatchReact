@@ -30,8 +30,9 @@ export default function App() {
     }
     
     if (action === 'NEWLAP') {
-        const newLap = Date.now() - startedTime;
-        setLaps([newLap].concat(laps));
+        const previousLap = laps === null || laps.length === 0 ? startedTime : laps.slice(-1); 
+        const newLap = Date.now() - previousLap;
+        setLaps(laps.concat(newLap));
     } 
       
     console.log(laps);

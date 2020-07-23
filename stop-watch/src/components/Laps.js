@@ -1,32 +1,23 @@
 import React from 'react';
 
 export default function Laps({lapRecords}) {
- 
-  const LapRecord = ({lapId, lapValue}) => {
-    return (
-      <div className="lapRecord" id={lapId}> 
-        <div className="lapRecordLabel"> Lap {lapId}</div> 
-        <div className="lapRecordValue"> {lapValue}</div> 
-      </div>
-    );
-  }
+  const listItems = lapRecords.map((laptTime, lapIndex) =>
+    <li key={lapIndex}>Lap {lapIndex}-{convertMilliSecondsToTime(laptTime)}</li>
+  );
+  
+  return <ul>{listItems}</ul>;
+}
 
-  let count = 1;
-  const final = [];
+function convertMilliSecondsToTime(milliSecondsValue) {
+  if (!milliSecondsValue || milliSecondsValue === null) return "00:00,00";
 
-  for (let lapRecord of Object.keys(lapRecords)){
-    final.push(LapRecord(count, lapRecord));
-    count +=1;
-  }
+  let elapsedSeconds = Math.floor(milliSecondsValue / 1000);
+  
+  let cs = Math.round((milliSecondsValue % 1000) / 10).toString().padStart(2, 0);
+  let s = (elapsedSeconds % 60).toString().padStart(2, 0);
+  let m = (Math.floor(elapsedSeconds / 60) % 60).toString().padStart(2, 0);
+  let hours = Math.floor(elapsedSeconds / 3600).toString().padStart(2, 0);
+  hours = hours !== '00' ? `${hours}:` : '';
 
-  return <div id="laps">{final}</div>
-
-  // return (
-  //   <div id="laps">
-  //   {
-  //    lapRecords.map((lapValue) => (<LapRecord lapId={ 1 } lapValue={ lapValue } /> ))
-  //   //  laps.map(({ lapId, lapValue }) => (<LapRecord lapId={ lapId } lapValue={ lapValue } /> ))
-  //   }
-  //   </div>
-  // );
+  return `${hours}${m}:${s},${cs}`;
 }
