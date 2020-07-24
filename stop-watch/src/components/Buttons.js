@@ -5,10 +5,12 @@ export default function Buttons({status, onButtonClick}) {
 
   const newLapOrResetClicked = () => {
     if (status === 'PAUSED') {
+      console.log('LAP_RESET_BTN: PAUSED -> RESET');
       return onButtonClick('RESET');
     }
 
     if(status === 'STARTED') {
+      console.log('LAP_RESET_BTN: STARTED -> NEWLAP');
       return onButtonClick('NEWLAP');
     }
   };
@@ -17,16 +19,19 @@ export default function Buttons({status, onButtonClick}) {
    
     if(status === 'INITIAL')
     {
+      console.log('START_PAUSE_BTN: INITIAL -> START');
       return onButtonClick('START');
     }
 
     if (status === 'PAUSED')
     {
+      console.log('START_PAUSE_BTN: PAUSED -> CONTINUE');
       return onButtonClick('CONTINUE');
     }
 
     if(status === 'STARTED')
     {
+      console.log('START_PAUSE_BTN: STARTED -> PAUSE');
       return onButtonClick('PAUSE');
     }
   };

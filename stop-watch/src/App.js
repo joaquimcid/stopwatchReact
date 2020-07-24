@@ -12,9 +12,16 @@ export default function App() {
   //                    \     /
   //                    PAUSED
   
-  
-  // action    => RESET, START, PAUSE, CONTINUE, NEWLAP  
-  const [state, stateChange] = useReducer((currentState, action) =>  {
+  const initialState = {
+    status: "INITIAL",
+    startedTime: 0,
+    pausedTime: null,
+    laps: []
+  };
+
+  function reducer(currentState, action) {
+    console.log(action.type);
+
     switch(action.type) {
       case "START":
         return {
@@ -54,32 +61,25 @@ export default function App() {
           };
 
       case "RESET":
-        return {
-            status: "INITIAL",
-            startedTime: 0,
-            pausedTime: null,
-            laps: []
-          };
+        return initialState;
       default: return currentState;
     }
-  }, 
-  {
-    status: "INITIAL",
-    startedTime: 0,
-    pausedTime: null,
-    laps: []
-  });
+    
+  }
+
+  function callMe(a) {
+    console.log('Call me:' + a.type);
+    dispatch(a);
+  }
+  
+  // action    => RESET, START, PAUSE, CONTINUE, NEWLAP  
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
     <div className="app">
       <Display timeToShow={state.status === "INITIAL" ? null : Date.now() - state.startedTime} />
-      {/* stateChange */}            
-      <Buttons status = {state.status} onButtonClick = {(a) => stateChange({ type: a })}/>
-      {/* <Buttons status = {status} onButtonClick = {(a) =>  Command(a)}/> */}
+      <Buttons status = {state.status} onButtonClick = {(a) => callMe({ type: a })}/>
       <Laps lapRecords= {state.laps}/>
     </div>
   );
 }
-
-
-
