@@ -5,6 +5,8 @@ import Buttons from './components/Buttons';
 
 import './App.css';
 
+// TODO :
+// Laps pars no guarden el valor correct. El reducer action dispatch es executa dos cops cada click, revisar.
 export default function App() {
   // app_state => INITIAL  - STARTED
   //                    \     /
@@ -22,7 +24,6 @@ export default function App() {
             laps: []
           };
 
-          // TODO
       case "PAUSE":
         return {
             status: "PAUSED",      
