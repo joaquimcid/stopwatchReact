@@ -1,50 +1,59 @@
-import React, {useState} from 'react';
+import React, {useReducer} from 'react';
 import Display from './components/Display';
-import Laps from './components/Laps';
+// import Laps from './components/Laps';
 import Buttons from './components/Buttons';
 
 import './App.css';
 
 export default function App() {
-  /* status => INITIAL, STARTED, PAUSED */
-  const [status, setStatus] = useState('INITIAL');
-  const [laps, setLaps] = useState([]);
-  const [startedTime, setStartedTime] = useState(null);
-
-  /* Actions => RESET, NEWLAP, START, PAUSE, CONTINUE */
-  function Command(action) {
-    // console.log(action);
-    
-    if (action === 'START' || action === 'CONTINUE') {
-      setStatus('STARTED');
-
-      if (action === 'START') setStartedTime(Date.now);
-    }
-    if (action === 'PAUSE') setStatus('PAUSED');
-    
-    if (action === 'RESET') {
-      setLaps([]);
-
-      setStatus('INITIAL');
-      setStartedTime(Date.now)
-    }
-    
-    if (action === 'NEWLAP') {
-        const previousLap = laps === null || laps.length === 0 ? startedTime : laps.slice(-1); 
+  // app_state => INITIAL, STARTED, PAUSED
+  // action    => RESET,   START,   PAUSE, CONTINUE, NEWLAP  
+  const [state, stateChange] = useReducer((currentState, action) =>  {
+    switch(action.type) {
+      case "START":
+        return [
+          "STARTED",
+          {
+            startedTime: Date.now(),
+            laps: []
+          }
+        ];
+      case "PAUSE":
+          break;
+      case "CONTINUE":
+        break; 
+      case "NEWLAP":
+        const previousLap = currentState.laps === null || currentState.laps.length === 0 ? currentState.startedTime : currentState.laps[currentState.laps.length-1]; 
         const newLap = Date.now() - previousLap;
-        setLaps(laps.concat(newLap));
-    } 
-      
-    console.log(laps);
-    // console.log(laps.length);
-  }
+        
+        return [
+          "STARTED",
+          {
+            startedTime: currentState.startedTime,
+            laps: currentState.laps.concat(newLap)
+          }
+        ];
+      case "RESET":
+        return [
+          "INITIAL",
+          {
+            startedTime: 0,
+            laps: []
+          }
+        ];
+      default:
+        return currentState;
+    }
+  }, "INITIAL");
 
   return (
     <div className="app">
-      <Display timeToShow={!startedTime || startedTime === null ? null : (Date.now() - startedTime)} />
-      <Buttons status = {status} onButtonClick = {(a) =>  Command(a)}/>
-      <Laps lapRecords= {laps}/>
-      {/* {status} - {startedTime} - {Date.now() - startedTime} */}
+      <Display timeToShow={state === "INITIAL" ? null : Date.now() - state[1].startedTime} />
+      {/* stateChange */}
+            
+      <Buttons status = {state} onButtonClick = {(a) => stateChange({ type: a })}/>
+      {/* <Buttons status = {status} onButtonClick = {(a) =>  Command(a)}/> */}
+      {/* <Laps lapRecords= {state[1].laps}/> */}
     </div>
   );
 }
