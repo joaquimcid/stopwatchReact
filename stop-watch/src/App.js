@@ -6,8 +6,12 @@ import Buttons from './components/Buttons';
 import './App.css';
 
 export default function App() {
-  // app_state => INITIAL, STARTED, PAUSED
-  // action    => RESET,   START,   PAUSE, CONTINUE, NEWLAP  
+  // app_state => INITIAL  - STARTED
+  //                    \     /
+  //                    PAUSED
+  
+  
+  // action    => RESET, START, PAUSE, CONTINUE, NEWLAP  
   const [state, stateChange] = useReducer((currentState, action) =>  {
     switch(action.type) {
       case "START":
@@ -18,6 +22,7 @@ export default function App() {
             laps: []
           };
 
+          // TODO
       case "PAUSE":
         return {
             status: "PAUSED",      
@@ -29,8 +34,9 @@ export default function App() {
       case "CONTINUE":
         return {
             status: "STARTED",
-            startedTime: Date.now(),
-            laps: []
+            startedTime: currentState.startedTime + Date.now() - currentState.pausedTime,
+            pausedTime: null,
+            laps: currentState.laps
           };
 
       case "NEWLAP":
@@ -40,6 +46,7 @@ export default function App() {
         return {
             status: "STARTED",
             startedTime: currentState.startedTime,
+            pausedTime: null,
             laps: currentState.laps.concat(newLap)
           };
 
@@ -47,6 +54,7 @@ export default function App() {
         return {
             status: "INITIAL",
             startedTime: 0,
+            pausedTime: null,
             laps: []
           };
       default: return currentState;
@@ -55,6 +63,7 @@ export default function App() {
   {
     status: "INITIAL",
     startedTime: 0,
+    pausedTime: null,
     laps: []
   });
 
