@@ -1,6 +1,6 @@
 import React, {useReducer} from 'react';
 import Display from './components/Display';
-// import Laps from './components/Laps';
+import Laps from './components/Laps';
 import Buttons from './components/Buttons';
 
 import './App.css';
@@ -40,7 +40,9 @@ export default function App() {
           };
 
       case "NEWLAP":
-        const previousLap = currentState.laps === null || currentState.laps.length === 0 ? currentState.startedTime : currentState.laps[currentState.laps.length-1]; 
+        const previousLap = currentState.laps === null || currentState.laps.length === 0 
+                          ? currentState.startedTime 
+                          : currentState.laps[currentState.laps.length-1]; 
         const newLap = Date.now() - previousLap;
         
         return {
@@ -73,7 +75,7 @@ export default function App() {
       {/* stateChange */}            
       <Buttons status = {state.status} onButtonClick = {(a) => stateChange({ type: a })}/>
       {/* <Buttons status = {status} onButtonClick = {(a) =>  Command(a)}/> */}
-      {/* <Laps lapRecords= {state.laps}/> */}
+      <Laps lapRecords= {state.laps}/>
     </div>
   );
 }
