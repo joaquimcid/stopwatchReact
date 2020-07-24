@@ -19,9 +19,23 @@ export default function App() {
           }
         ];
       case "PAUSE":
-          break;
+        return [
+          "PAUSED",
+          {
+            startedTime: Date.now(),
+            laps: currentState.laps
+          }
+        ];
+          
       case "CONTINUE":
-        break; 
+        return [
+          "STARTED",
+          {
+            startedTime: Date.now(),
+            laps: []
+          }
+        ];
+
       case "NEWLAP":
         const previousLap = currentState.laps === null || currentState.laps.length === 0 ? currentState.startedTime : currentState.laps[currentState.laps.length-1]; 
         const newLap = Date.now() - previousLap;
@@ -44,14 +58,17 @@ export default function App() {
       default:
         return currentState;
     }
-  }, "INITIAL");
+  }, ["INITIAL", {
+    startedTime: 0,
+    laps: []
+  }]);
 
   return (
     <div className="app">
-      <Display timeToShow={state === "INITIAL" ? null : Date.now() - state[1].startedTime} />
+      <Display timeToShow={state[0] === "INITIAL" ? null : Date.now() - state[1].startedTime} />
       {/* stateChange */}
             
-      <Buttons status = {state} onButtonClick = {(a) => stateChange({ type: a })}/>
+      <Buttons status = {state[0]} onButtonClick = {(a) => stateChange({ type: a })}/>
       {/* <Buttons status = {status} onButtonClick = {(a) =>  Command(a)}/> */}
       {/* <Laps lapRecords= {state[1].laps}/> */}
     </div>
