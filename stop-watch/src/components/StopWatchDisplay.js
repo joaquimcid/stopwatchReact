@@ -9,9 +9,10 @@ export default function StopWatchDisplay({startedTime, pausedTime, format})
   const [value, setValue] = useState(valueToDisplayPretty);
 
   useEffect(() => {
-    requestAnimationFrame(() => {
+    const request = requestAnimationFrame(() => {
       setValue(format(timeToShow(startedTime, pausedTime)));
     });
+    return () => cancelAnimationFrame(request);
   });
   
   return <Display timeToShow={value} />
