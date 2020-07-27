@@ -1,4 +1,4 @@
-import React, {useReducer} from 'react';
+import React, {useReducer, useEffect} from 'react';
 import Display from './components/Display';
 import Laps from './components/Laps';
 import Buttons from './components/Buttons';
@@ -9,7 +9,8 @@ const initialState = {
   status: "INITIAL",
   startedTime: 0,
   pausedTime: null,
-  laps: []
+  laps: [],
+  elapsedTime: null
 };
 
 function reducer(currentState, action) {
@@ -21,7 +22,8 @@ function reducer(currentState, action) {
           status: "STARTED",
           startedTime: Date.now(),
           pausedTime: null,
-          laps: []
+          laps: [],
+          elapsedTime: null
         };
 
     case "PAUSE":
@@ -29,15 +31,18 @@ function reducer(currentState, action) {
           status: "PAUSED",      
           startedTime: currentState.startedTime,
           pausedTime: Date.now(),
-          laps: currentState.laps
+          laps: currentState.laps,
+          elapsedTime: currentState.elapsedTime
         };
         
     case "CONTINUE":
+      let updateStartedTime = currentState.startedTime + Date.now() - currentState.pausedTime;
       return {
           status: "STARTED",
-          startedTime: currentState.startedTime + Date.now() - currentState.pausedTime,
+          startedTime: updateStartedTime,
           pausedTime: null,
-          laps: currentState.laps
+          laps: currentState.laps,
+          elapsedTime: Date.now()-updateStartedTime
         };
 
     case "NEWLAP":
@@ -50,11 +55,20 @@ function reducer(currentState, action) {
           status: "STARTED",
           startedTime: currentState.startedTime,
           pausedTime: null,
-          laps: currentState.laps.concat(newLap)
+          laps: currentState.laps.concat(newLap),
+          elapsedTime: Date.now()-currentState.startedTime
         };
 
     case "RESET":
       return initialState;
+    case "REFRESH":
+        return {
+            status: currentState.status,
+            startedTime: currentState.startedTime,
+            pausedTime: currentState.pausedTime,
+            laps: currentState.laps,
+            elapsedTime: Date.now()-currentState.startedTime
+          };
     default: return currentState;
   }
   
@@ -70,9 +84,22 @@ export default function App() {
   // action    => RESET, START, PAUSE, CONTINUE, NEWLAP  
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (state.status === "STARTED"){
+        console.log(`Refresh screen. Time to show: ${state.timeToShow}`);
+        
+        return dispatch({type: "REFRESH"});
+        // return dispatch({type: "REFRESH"});
+      } 
+      else console.log(`NO Refresh screen. Time to show: ${state.timeToShow}`);
+    }, 100);
+    return () => clearInterval(interval);
+  });
+
   return (
     <div className="app">
-      <Display timeToShow={state.status === "INITIAL" ? null : Date.now() - state.startedTime} />
+      <Display timeToShow={state.elapsedTime} />
       <Buttons status = {state.status} onButtonClick = {(a) => dispatch({ type: a })}/>
       <Laps lapRecords= {state.laps}/>
     </div>
