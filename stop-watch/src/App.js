@@ -64,6 +64,17 @@ function reducer(currentState, action) {
 // TODO :
 // Laps pars no guarden el valor correct. 
 // El reducer action dispatch es executa dos cops cada click, revisar. -> Side efect del reducer.
+// Efecte visual raro:
+/*
+foo
+StopWatchDisplay.js:15 00:13,96
+StopWatchDisplay.js:15 00:13,98
+StopWatchDisplay.js:15 00:13,100 ---> efecte raro
+StopWatchDisplay.js:15 00:14,01
+StopWatchDisplay.js:15 00:14,03
+StopWatchDisplay.js:15 00:14,05
+StopWatchDisplay.js:15 00:14,06
+*/
 export default function App() {
   // app_state => INITIAL  - STARTED
   //                    \     /

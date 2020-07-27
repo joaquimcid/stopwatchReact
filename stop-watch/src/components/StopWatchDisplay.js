@@ -9,32 +9,19 @@ export default function StopWatchDisplay({startedTime, pausedTime})
   const [value, setValue] = useState(valueToDisplayPretty);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setValue(convertMilliSecondsToTime(timeToShow(startedTime, pausedTime)));
-    }, 100);
-
-    return () => clearInterval(interval);
+    requestAnimationFrame(() => {
+      // console.log('foo');
+      const value = convertMilliSecondsToTime(timeToShow(startedTime, pausedTime));
+      // console.log(value);
+      setValue(value);
+    });
+    // return () => clearr(interval);
+  // }, [{startedTime, pausedTime}]);
   });
   
   return <Display timeToShow={value} />
 
 }
-
-// useEffect(() => {
-//   if (state.status === "STARTED"){
-
-//     const interval = setInterval(() => {
-//       if (state.status === "STARTED"){
-//         console.log(`Refresh screen. Time to show: ${state.timeToShow}`);
-        
-//         return dispatch({type: "REFRESH"});
-//       } 
-//       else console.log(`NO Refresh screen. Time to show: ${state.timeToShow}`);
-//     }, 100);
-//     return () => clearInterval(interval);
-//   }
-// });
-
 
 function timeToShow(startedTime, pausedTime)
 {
