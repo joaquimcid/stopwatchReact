@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Laps({lapRecords}) {
   const listItems = lapRecords.map((laptTime, lapIndex) =>
-    <li key={lapIndex}>Lap {lapIndex}-{convertMilliSecondsToTime(laptTime)}</li>
+    <li key={lapIndex}>Lap {lapIndex}__________{convertMilliSecondsToTime(laptTime)}__________{laptTime}</li>
   );
   
   return <ul>{listItems}</ul>;

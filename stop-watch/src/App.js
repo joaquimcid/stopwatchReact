@@ -1,53 +1,80 @@
-import React, {useState} from 'react';
+import React, {useReducer} from 'react';
 import Display from './components/Display';
 import Laps from './components/Laps';
 import Buttons from './components/Buttons';
 
 import './App.css';
 
-export default function App() {
-  /* status => INITIAL, STARTED, PAUSED */
-  const [status, setStatus] = useState('INITIAL');
-  const [laps, setLaps] = useState([]);
-  const [startedTime, setStartedTime] = useState(null);
+const initialState = {
+  status: "INITIAL",
+  startedTime: 0,
+  pausedTime: null,
+  laps: []
+};
 
-  /* Actions => RESET, NEWLAP, START, PAUSE, CONTINUE */
-  function Command(action) {
-    // console.log(action);
-    
-    if (action === 'START' || action === 'CONTINUE') {
-      setStatus('STARTED');
+function reducer(currentState, action) {
+  console.log(action.type);
 
-      if (action === 'START') setStartedTime(Date.now);
-    }
-    if (action === 'PAUSE') setStatus('PAUSED');
-    
-    if (action === 'RESET') {
-      setLaps([]);
+  switch(action.type) {
+    case "START":
+      return {
+          status: "STARTED",
+          startedTime: Date.now(),
+          pausedTime: null,
+          laps: []
+        };
 
-      setStatus('INITIAL');
-      setStartedTime(Date.now)
-    }
-    
-    if (action === 'NEWLAP') {
-        const previousLap = laps === null || laps.length === 0 ? startedTime : laps.slice(-1); 
-        const newLap = Date.now() - previousLap;
-        setLaps(laps.concat(newLap));
-    } 
+    case "PAUSE":
+      return {
+          status: "PAUSED",      
+          startedTime: currentState.startedTime,
+          pausedTime: Date.now(),
+          laps: currentState.laps
+        };
+        
+    case "CONTINUE":
+      return {
+          status: "STARTED",
+          startedTime: currentState.startedTime + Date.now() - currentState.pausedTime,
+          pausedTime: null,
+          laps: currentState.laps
+        };
+
+    case "NEWLAP":
+      const previousLap = currentState.laps === null || currentState.laps.length === 0 
+                        ? currentState.startedTime 
+                        : currentState.laps[currentState.laps.length-1]; 
+      const newLap = Date.now() - previousLap;
       
-    console.log(laps);
-    // console.log(laps.length);
+      return {
+          status: "STARTED",
+          startedTime: currentState.startedTime,
+          pausedTime: null,
+          laps: currentState.laps.concat(newLap)
+        };
+
+    case "RESET":
+      return initialState;
+    default: return currentState;
   }
+  
+}
+
+// TODO :
+// Laps pars no guarden el valor correct. El reducer action dispatch es executa dos cops cada click, revisar.
+export default function App() {
+  // app_state => INITIAL  - STARTED
+  //                    \     /
+  //                    PAUSED
+  
+  // action    => RESET, START, PAUSE, CONTINUE, NEWLAP  
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
     <div className="app">
-      <Display timeToShow={!startedTime || startedTime === null ? null : (Date.now() - startedTime)} />
-      <Buttons status = {status} onButtonClick = {(a) =>  Command(a)}/>
-      <Laps lapRecords= {laps}/>
-      {/* {status} - {startedTime} - {Date.now() - startedTime} */}
+      <Display timeToShow={state.status === "INITIAL" ? null : Date.now() - state.startedTime} />
+      <Buttons status = {state.status} onButtonClick = {(a) => dispatch({ type: a })}/>
+      <Laps lapRecords= {state.laps}/>
     </div>
   );
 }
-
-
-
